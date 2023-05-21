@@ -30,19 +30,22 @@ def read_from_file(file_name=None) -> str:
     return string
 
 
-def create_one_key(found: Union[tuple, None], key: str) -> list:
-    """
-    Создание массива индексов для одного ключа
-    :param found: индексы найденных ключевых слов
-    :param key: название искомого ключа
-    :return: массива индексов
-    """
-    ids = []
-    for i in range(len(found)):
-        ids.append([])
-        for j in range(len(key)):
-            ids[i].append(found[i] + j)
-    return ids
+def write_to_file(result_file, strings, ids):
+    try:
+        rfile = open(result_file, "w", encoding="utf-8")
+        rfile.close()
+    except PermissionError:
+        print("Unable to open result file")
+        return
+    file = open(result_file, "a", encoding="utf-8")
+    file.write("data: '" + " ".join(strings) + "'\n")
+    file.write("Results:\n")
+    for key in ids:
+        file.write(key + ": ")
+        for i in ids[key]:
+            file.write(strings[i] + " ")
+        file.write("\n")
+    file.close()
 
 
 def print_colored_word(word, color, reset):
@@ -51,7 +54,7 @@ def print_colored_word(word, color, reset):
     print(reset + " ", end="")
 
 
-def print_text(strings: list, found: Union[list, None]) -> None:
+def print_text(strings: list, found: Union[dict, None]) -> None:
     """
     Цветной вывод найденных подстрок в консоль
     :param string: строка для поиска
@@ -64,7 +67,6 @@ def print_text(strings: list, found: Union[list, None]) -> None:
         print(" ".join(strings))
     else:
         init()
-        color_id = 0
         colors = (
             Style.BRIGHT + Fore.BLACK + Back.RED,
             Style.BRIGHT + Fore.BLACK + Back.YELLOW,
@@ -72,14 +74,14 @@ def print_text(strings: list, found: Union[list, None]) -> None:
             Style.BRIGHT + Fore.BLACK + Back.GREEN,
             Style.BRIGHT + Fore.BLACK + Back.MAGENTA,
         )
+        keys = list(found.keys())
         reset = Style.RESET_ALL + Fore.RESET + Back.RESET
         for i in range(len(strings)):
-            if i in found:
-                print_colored_word(strings[i], colors[color_id], reset)
-                if color_id + 1 == len(colors):
-                    color_id = 0
-                else:
-                    color_id += 1
+            for j in range(len(keys)):
+                if i in found[keys[j]]:
+                    color = colors[j]
+                    print_colored_word(strings[i], color, reset)
+                    break
             else:
                 print(reset + strings[i], end=" ")
         print(Back.RESET)

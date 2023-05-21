@@ -1,0 +1,5 @@
+data: 'apple Apple arry New applee appl a new Neww aa aaa'
+Results:
+apple: appl applee Apple apple 
+a: aa a 
+new: Neww new New 

@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from input import print_text
+from input import print_text, write_to_file
 from search import search
 
 
@@ -27,14 +27,14 @@ def main():
     strings = args.string
     file_flag = args.file
     result_file = args.result_file
-    substring = args.sub_string
+    keys = args.sub_strings
     case_sensitive = args.case_sensitive
     count = args.count
     threshold = args.threshold
     n_process = args.process
 
-    if len(strings) > 10:
-        print("The number of strings cant be more than 10")
+    if len(keys) > 5:
+        print("The number of keys cant be more than 10")
         return
     if file_flag:
         if len(strings) > 1:
@@ -59,18 +59,13 @@ def main():
         print("Process cant be negative")
         return
 
-    if result_file:
-        try:
-            rfile = open(result_file, "w", encoding="utf-8")
-        except PermissionError:
-            print("Unable to open result file")
-            return
-
-    ids = search(substring, strings, case_sensitive, threshold, count,
-                 args.reverse)
+    ids = dict()
+    for key in keys:
+        ids[key] = search(key, strings, case_sensitive, threshold, count,
+                          args.reverse)
     print_text(strings, ids)
     if result_file:
-        rfile.close()
+        write_to_file(result_file, strings, ids)
 
 
 if __name__ == "__main__":
