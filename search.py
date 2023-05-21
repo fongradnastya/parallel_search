@@ -1,3 +1,6 @@
+from multiprocessing import Process, Manager
+
+
 def damerau_levenshtein_distance(s1, s2):
     # Initialize a matrix of size (len(s1)+1) x (len(s2)+1)
     matrix = [[0 for j in range(len(s2)+1)] for i in range(len(s1)+1)]
@@ -38,3 +41,23 @@ def search(query, lst, case_sensitive=True, max_distance=2, k_matches=None,
         if k_matches and len(ids) == k_matches:
             return ids
     return ids
+
+
+def parallel_search(query, string, case_sensitive=True, max_distance=2,
+                    k_matches=None, reverse=False, n_process=None):
+    manager = Manager()
+    mdict = manager.dict()
+    lock = manager.RLock()
+    max_len = 1
+    for substring in string:
+        size = len(substring)
+        if size > max_len:
+            max_len = size
+    processes = tuple()
+    chunk_size = len(string) // (n_process if n_process else 1) + 1
+    chunks = [(string[i:i + chunk_size + max_len - 1], i)
+              for i in range(0, len(string), chunk_size)]
+    for chunk in chunks:
+        process = Process(target=search, args=(*chunk, mdict, lock))
+        process.start()
+        processes += (process,)

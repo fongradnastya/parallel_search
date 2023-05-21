@@ -53,20 +53,24 @@ def main():
     if n_process and n_process < 0:
         print("Process cant be negative")
         return
-
+    founds = dict()
     ids = dict()
     cnt = 0
     for string in strings:
         words = string.split(" ")
         for key in keys:
+            if key not in founds:
+                founds[key] = []
             ids[key] = search(key, words, case_sensitive, threshold, count,
                               args.reverse)
+            for i in ids[key]:
+                founds[key].append(words[i])
         print_text(words, ids)
         cnt += 1
         if cnt == 10:
             break
     if result_file:
-        write_to_file(result_file, strings, ids)
+        write_to_file(result_file, strings, founds)
 
 
 if __name__ == "__main__":

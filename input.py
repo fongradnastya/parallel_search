@@ -18,7 +18,7 @@ def read_from_file(file_name: str) -> list:
     return strings
 
 
-def write_to_file(result_file, strings, ids):
+def write_to_file(result_file, strings, founds):
     try:
         rfile = open(result_file, "w", encoding="utf-8")
         rfile.close()
@@ -28,10 +28,10 @@ def write_to_file(result_file, strings, ids):
     file = open(result_file, "a", encoding="utf-8")
     file.write("data: '" + " ".join(strings) + "'\n")
     file.write("Results:\n")
-    for key in ids:
+    for key in founds:
         file.write(key + ": ")
-        for i in ids[key]:
-            file.write(strings[i] + " ")
+        for item in founds[key]:
+            file.write(item + " ")
         file.write("\n")
     file.close()
 

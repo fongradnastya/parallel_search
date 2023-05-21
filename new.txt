@@ -1,5 +1,5 @@
 data: 'a aa new nn w'
 Results:
 apple: 
-a: a aa 
-new: 
+a: aa a w 
+new: new 
