@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 from input import print_text, write_to_file, read_from_file
-from search import search
+from search import parallel_search
 
 
 def main():
@@ -35,7 +35,6 @@ def main():
     if len(keys) > 5:
         print("The number of keys cant be more than 5")
         return
-
     if args.source_file:
         if strings:
             print("Error")
@@ -45,13 +44,13 @@ def main():
         print("No data to search")
         return
     if count and count < 0:
-        print("Count cant be negative")
+        print("Count can't be negative")
         return
     if threshold < 0:
-        print("Threshold cant be negative")
+        print("Threshold can't be negative")
         return
     if n_process and n_process < 0:
-        print("Process cant be negative")
+        print("Process can't be negative")
         return
     founds = dict()
     ids = dict()
@@ -61,8 +60,8 @@ def main():
         for key in keys:
             if key not in founds:
                 founds[key] = []
-            ids[key] = search(key, words, case_sensitive, threshold, count,
-                              args.reverse)
+            ids[key] = parallel_search(key, words, case_sensitive, threshold,
+                                       count, args.reverse)
             for i in ids[key]:
                 founds[key].append(words[i])
         print_text(words, ids)

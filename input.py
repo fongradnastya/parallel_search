@@ -1,4 +1,3 @@
-import os
 from colorama import init, Back, Fore, Style
 from typing import Union
 
@@ -7,7 +6,7 @@ def read_from_file(file_name: str) -> list:
     """
     Считывание строк из файла
     :param file_name: имя файла для открытия
-    :return:
+    :return: считанные строки
     """
     strings = []
     with open(file_name, "r", encoding='utf-8') as file:
@@ -19,6 +18,12 @@ def read_from_file(file_name: str) -> list:
 
 
 def write_to_file(result_file, strings, founds):
+    """
+    Записывает в файл информацию о найденных строках
+    :param result_file: файл для записи
+    :param strings: исходный набор строк
+    :param founds: найденные строки
+    """
     try:
         rfile = open(result_file, "w", encoding="utf-8")
         rfile.close()
@@ -36,19 +41,11 @@ def write_to_file(result_file, strings, founds):
     file.close()
 
 
-def print_colored_word(word, color, reset):
-    for char in word:
-        print(color + char, end="")
-    print(reset + " ", end="")
-
-
 def print_text(strings: list, found: Union[dict, None]) -> None:
     """
     Цветной вывод найденных подстрок в консоль
-    :param string: строка для поиска
+    :param strings: строка для поиска
     :param found: индексы найденных ключевых слов
-    :param key: ключевые слова
-    :return: None
     """
     if not found:
         "There are no substrings founded here"
@@ -68,7 +65,9 @@ def print_text(strings: list, found: Union[dict, None]) -> None:
             for j in range(len(keys)):
                 if i in found[keys[j]]:
                     color = colors[j]
-                    print_colored_word(strings[i], color, reset)
+                    for char in strings[i]:
+                        print(color + char, end="")
+                    print(reset + " ", end="")
                     break
             else:
                 print(reset + strings[i], end=" ")

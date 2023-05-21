@@ -1,5 +1,5 @@
-data: 'a aa new nn w'
+data: 'a aa new a aa MM$srdt rayT  nEW AD New a new nn rayT  nEW AD New a w qwrse ey e rrr a aa nnew apple'
 Results:
-apple: 
-a: aa a w 
-new: new 
+apple: apple 
+a: a AD  aa a aa a a AD  aa a e w 
+new: New nEW new New nEW new nnew 
