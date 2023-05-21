@@ -3,31 +3,19 @@ from colorama import init, Back, Fore, Style
 from typing import Union
 
 
-def read_from_file(file_name=None) -> str:
+def read_from_file(file_name: str) -> list:
     """
     Считывание строк из файла
     :param file_name: имя файла для открытия
-    :return: считанная строка или None
+    :return:
     """
-    while not file_name:
-        file_name = input("Please, enter a file name (with extension): ")
-        if not os.path.exists(file_name):
-            print("This filename is incorrect. Please, try again")
-            file_name = None
-    string = ""
-    counter = 0
+    strings = []
     with open(file_name, "r", encoding='utf-8') as file:
         for line in file:
-            string += line
-            counter += 1
-            if counter > 10:
-                break
-    if (not string) or (string == " "):
+            strings.append(line.strip("\n"))
+    if not strings:
         print("Read string is empty")
-        string = None
-    else:
-        string = ' '.join(string.split("\n"))
-    return string
+    return strings
 
 
 def write_to_file(result_file, strings, ids):
