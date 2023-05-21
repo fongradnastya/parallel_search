@@ -1,5 +1,3 @@
-# Define a function to calculate the Damerau-Levenshtein distance
-# between two strings
 def damerau_levenshtein_distance(s1, s2):
     # Initialize a matrix of size (len(s1)+1) x (len(s2)+1)
     matrix = [[0 for j in range(len(s2)+1)] for i in range(len(s1)+1)]
@@ -26,37 +24,17 @@ def damerau_levenshtein_distance(s1, s2):
 
 def search(query, lst, case_sensitive=True, max_distance=2, k_matches=None,
            reverse=False):
-    # Initialize a variable to store the minimum distance and the
-    # matching string
-    if reverse:
-        lst.reverse()
-    match = []
+    ids = []
     # Loop through the list of strings
-    for string in lst:
-        # If case sensitivity is False, convert both query and
-        # string to lower case
+    r = range(len(lst) - 1, -1, -1) if reverse else range(len(lst))
+    for i in r:
         if not case_sensitive:
             distance = damerau_levenshtein_distance(query.lower(),
-                                                    string.lower())
-        # Calculate the distance between the query and the string
+                                                    lst[i].lower())
         else:
-            distance = damerau_levenshtein_distance(query, string)
-        # If the distance is smaller than the current minimum, update
-        # the minimum and the match
+            distance = damerau_levenshtein_distance(query, lst[i])
         if distance < max_distance:
-            match.append(string)
-        if k_matches and len(match) == k_matches:
-            return match
-    # Return the match and the minimum distance
-    return match
-
-
-def main():
-    lst = ["Apple", "Banana", "Orange", "Pear", "Pineapple", "apple"]
-    query = "aple"
-    match = search(query, lst, case_sensitive=False, k_matches=1, reverse=True)
-    print(f"The closest match to {query} is {match}")
-
-
-if __name__ == "__main__":
-    main()
+            ids.append(i)
+        if k_matches and len(ids) == k_matches:
+            return ids
+    return ids

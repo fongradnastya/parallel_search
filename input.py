@@ -45,8 +45,13 @@ def create_one_key(found: Union[tuple, None], key: str) -> list:
     return ids
 
 
-def print_text(string: str, found: Union[tuple, None],
-               key: str) -> None:
+def print_colored_word(word, color, reset):
+    for char in word:
+        print(color + char, end="")
+    print(reset + " ", end="")
+
+
+def print_text(strings: list, found: Union[list, None]) -> None:
     """
     Цветной вывод найденных подстрок в консоль
     :param string: строка для поиска
@@ -56,31 +61,25 @@ def print_text(string: str, found: Union[tuple, None],
     """
     if not found:
         "There are no substrings founded here"
-        print(string)
+        print(" ".join(strings))
     else:
-        if isinstance(found, tuple):
-            found = create_one_key(found, key)
         init()
         color_id = 0
         colors = (
-            Style.BRIGHT + Fore.BLUE + Back.RED,
-            Style.BRIGHT + Fore.CYAN + Back.YELLOW,
-            Style.BRIGHT + Fore.YELLOW + Back.CYAN,
-            Style.BRIGHT + Fore.MAGENTA + Back.GREEN,
-            Style.BRIGHT + Fore.GREEN + Back.MAGENTA,
+            Style.BRIGHT + Fore.BLACK + Back.RED,
+            Style.BRIGHT + Fore.BLACK + Back.YELLOW,
+            Style.BRIGHT + Fore.BLACK + Back.CYAN,
+            Style.BRIGHT + Fore.BLACK + Back.GREEN,
+            Style.BRIGHT + Fore.BLACK + Back.MAGENTA,
         )
         reset = Style.RESET_ALL + Fore.RESET + Back.RESET
-        counter = 0
-        for i, char in enumerate(string):
-            if i in found[counter]:
-                print(colors[color_id] + char, end="")
-            elif counter + 1 < len(found) and i in found[counter + 1]:
-                counter += 1
+        for i in range(len(strings)):
+            if i in found:
+                print_colored_word(strings[i], colors[color_id], reset)
                 if color_id + 1 == len(colors):
                     color_id = 0
                 else:
                     color_id += 1
-                print(colors[color_id] + char, end="")
             else:
-                print(reset + char, end="")
+                print(reset + strings[i], end=" ")
         print(Back.RESET)

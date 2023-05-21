@@ -14,17 +14,17 @@ def main():
     parser.add_argument("-s", "--string", type=str, nargs="+", required=True)
     parser.add_argument("-f", "--file", action="store_true", default=False)
     parser.add_argument("-rf", "--result-file", type=str, default=None)
-    parser.add_argument("-ss", "--sub-string", type=str, required=True)
+    parser.add_argument("-ss", "--sub-strings", type=str, nargs="+",
+                        required=True)
     parser.add_argument("-cs", "--case-sensitive",
                         action="store_true", default=False)
     parser.add_argument("-r", "--reverse", action="store_true", default=False)
     parser.add_argument("-c", "--count", type=int, default=None)
-    parser.add_argument("-t", "--threshold", type=int, default=1)
+    parser.add_argument("-t", "--threshold", type=int, default=2)
     parser.add_argument("-p", "--process", type=int, default=None)
 
     args = parser.parse_args()
     strings = args.string
-    print(strings)
     file_flag = args.file
     result_file = args.result_file
     substring = args.sub_string
@@ -66,9 +66,9 @@ def main():
             print("Unable to open result file")
             return
 
-    match = search(substring, strings, case_sensitive, threshold, count,
-                   args.reverse)
-    print(f"The closest match to {substring} is {match}")
+    ids = search(substring, strings, case_sensitive, threshold, count,
+                 args.reverse)
+    print_text(strings, ids)
     if result_file:
         rfile.close()
 
