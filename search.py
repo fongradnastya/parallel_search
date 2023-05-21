@@ -24,35 +24,39 @@ def damerau_levenshtein_distance(s1, s2):
     return matrix[-1][-1]
 
 
-# Define a function to perform linear search with Damerau-Levenshtein
-# presence metric on a list of strings with a parameter for case sensitivity
-def linear_search_damerau_levenshtein(query, lst, case_sensitive=True):
+def search(query, lst, case_sensitive=True, max_distance=2, k_matches=None,
+           reverse=False):
     # Initialize a variable to store the minimum distance and the
     # matching string
-    min_distance = float('inf')
-    match = None
+    if reverse:
+        lst.reverse()
+    match = []
     # Loop through the list of strings
     for string in lst:
         # If case sensitivity is False, convert both query and
         # string to lower case
         if not case_sensitive:
-            query = query.lower()
-            string = string.lower()
+            distance = damerau_levenshtein_distance(query.lower(),
+                                                    string.lower())
         # Calculate the distance between the query and the string
-        distance = damerau_levenshtein_distance(query, string)
+        else:
+            distance = damerau_levenshtein_distance(query, string)
         # If the distance is smaller than the current minimum, update
         # the minimum and the match
-        if distance < min_distance:
-            min_distance = distance
-            match = string
+        if distance < max_distance:
+            match.append(string)
+        if k_matches and len(match) == k_matches:
+            return match
     # Return the match and the minimum distance
-    return match, min_distance
+    return match
 
 
-# Example usage
-lst = ["Apple", "Banana", "Orange", "Pear", "Pineapple"]
-query = "aple"
-match, distance = linear_search_damerau_levenshtein(query, lst,
-                                                    case_sensitive=False)
-print(f"The closest match to {query} is {match} with "
-      f"a distance of {distance}.")
+def main():
+    lst = ["Apple", "Banana", "Orange", "Pear", "Pineapple", "apple"]
+    query = "aple"
+    match = search(query, lst, case_sensitive=False, k_matches=1, reverse=True)
+    print(f"The closest match to {query} is {match}")
+
+
+if __name__ == "__main__":
+    main()
