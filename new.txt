@@ -1,5 +1,5 @@
 data: 'a aa new a aa MM$srdt rayT  nEW AD New a new nn rayT  nEW AD New a w qwrse ey e rrr a aa nnew apple'
 Results:
 apple: apple 
-a: a AD  aa a aa a a AD  aa a e w 
-new: New nEW new New nEW new nnew 
+a: a aa a aa  a  a w e a aa 
+new: new New new New nnew 
